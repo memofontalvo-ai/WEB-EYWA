@@ -69,11 +69,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(5,12,6,.9);b
 .sec-sub{font-family:"Cormorant Garamond",serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.42);text-align:center;letter-spacing:2px;margin-bottom:22px;}
 /* CAT GRID */
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.cat-btn{background:rgba(0,0,0,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:14px;padding:17px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:90px;position:relative;overflow:hidden;transition:transform .15s,background .15s;border:none;outline:none;}
-.cat-btn::after{content:"";position:absolute;inset:0;border-radius:14px;border:1.5px solid var(--clr,rgba(255,255,255,.2));pointer-events:none;}
-.cat-btn:active{transform:scale(.97);background:rgba(0,0,0,.65);}
-.cat-icon{font-size:28px;margin-bottom:7px;line-height:1;}
-.cat-name{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--clr,#fff);text-align:center;}
+.cat-btn{background:rgba(0,0,0,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:14px;padding:17px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:90px;position:relative;overflow:hidden;transition:transform .15s,background .15s;border:1px solid rgba(200,168,75,.25);outline:none;}
+.cat-btn:active{transform:scale(.97);background:rgba(0,0,0,.7);border-color:rgba(200,168,75,.5);}
+.cat-icon{font-size:26px;margin-bottom:7px;line-height:1;filter:grayscale(30%);}
+.cat-name{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(200,168,75,.85);text-align:center;font-family:"Josefin Sans",sans-serif;}
 /* DETAIL */
 .badge{background:rgba(200,168,75,.12);border:1px solid rgba(200,168,75,.22);border-radius:4px;padding:7px 14px;margin:4px 0 10px;font-size:11px;color:var(--gold);letter-spacing:1px;display:inline-block;}
 .sec-lbl{font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:12px 0 5px;}
@@ -361,7 +360,7 @@ burger:{n:"Burger",e:"B",nota:"Todas incluyen papas a la francesa.",items:[
   {n:"Crispy Chicken Burger",p:"$31.000",i:"burger",d:"Pollo apanado, queso americano, tocineta, pepinillos, lechuga cogollo.",dom:true},
   {n:"Doble Smash Burger",p:"$37.500",i:"burger",d:"Doble carne Angus smash 180 gr, doble queso americano, lechuga, tomate.",dom:true}
 ]},
-raices:{n:"Raices",e:"R",items:[
+raices:{n:"Platos Tradicionales",e:"R",items:[
   {n:"Mini Paisa",p:"$30.000",i:"raices",d:"Frijoles, arroz blanco, chorizo, chicharron, carne molida, tajada madura, aguacate, huevo y arepa.",dom:true},
   {n:"Bandeja Paisa",p:"$42.000",i:"raices",d:"Frijoles, arroz, chorizo, morcilla, chicharron, carne molida, tajada madura, aguacate, huevo y arepa.",dom:true},
   {n:"Sancocho del Dia",p:"$31.000",d:"Arroz blanco, aguacate y limonada natural.",dom:true},
@@ -482,7 +481,7 @@ adicionales:{n:"Adicionales",e:"Ad",items:[
 };
 
 /* CAT COLORS */
-var CAT_COLORS={desayunos:"#ffb432",cafe:"#c8a46e",entradas:"#50c878",parrilla:"#ff6450",burger:"#ffc83c",raices:"#64dc64",pastas:"#b464dc",pescados:"#50bee6",bebidas:"#50b4e6",limonadas:"#c8e650",cocteles:"#ff64b4",vinos:"#b43c78",cervezas:"#ffa01e",licores:"#8cb4ff",adicionales:"#969696"};
+var CAT_COLORS={desayunos:"#c8a84b",cafe:"#c8a84b",entradas:"#c8a84b",parrilla:"#c8a84b",burger:"#c8a84b",raices:"#c8a84b",pastas:"#c8a84b",pescados:"#c8a84b",bebidas:"#c8a84b",limonadas:"#c8a84b",cocteles:"#c8a84b",vinos:"#c8a84b",cervezas:"#c8a84b",licores:"#c8a84b",adicionales:"#c8a84b"};
 var CAT_EMOJIS={desayunos:"&#127749;",cafe:"&#9749;",entradas:"&#129716;",parrilla:"&#129385;",burger:"&#127828;",raices:"&#127807;",pastas:"&#127837;",pescados:"&#128031;",bebidas:"&#129380;",limonadas:"&#127819;",cocteles:"&#127864;",vinos:"&#127863;",cervezas:"&#127866;",licores:"&#129347;",adicionales:"&#10133;"};
 
 /* LIVE MENU - loaded from Firebase or falls back to default */
