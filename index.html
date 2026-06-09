@@ -581,43 +581,18 @@ function getItems(d){
 function buildCatGrid(){
   var g=document.getElementById("catGrid");
   g.innerHTML="";
-  /* ── PROMO IMAGES SECTION ── */
-  var promoSec=document.createElement("div");
-  promoSec.className="admin-section";
-  var promoHdr=document.createElement("div");
-  promoHdr.className="admin-section-hdr";
-  promoHdr.innerHTML="<div class=\"admin-section-title\">&#127754; Imagenes del Carrusel</div><span style=\"color:rgba(255,255,255,.3);font-size:12px;\">&#9660;</span>";
-  var promoBdy=document.createElement("div");
-  promoBdy.className="admin-section-body";
-  promoBdy.id="promoBdy";
-  promoHdr.addEventListener("click",function(){promoBdy.classList.toggle("open");if(promoBdy.classList.contains("open"))loadPromoAdmin();});
-  promoSec.appendChild(promoHdr);
-  promoSec.appendChild(promoBdy);
-  body.appendChild(promoSec);
-
   var keys=Object.keys(MENU);
   for(var i=0;i<keys.length;i++){
     var k=keys[i];
     var d=MENU[k];
     var btn=document.createElement("button");
     btn.className="cat-btn";
-    btn.style.setProperty("--clr",CAT_COLORS[k]||"#fff");
+    btn.style.setProperty("--clr",CAT_COLORS[k]||"#c8a84b");
     btn.innerHTML='<span class="cat-icon">'+CAT_EMOJIS[k]+'</span><span class="cat-name">'+d.n+'</span>';
     (function(key){btn.addEventListener("click",function(){openCat(key);});})(k);
     g.appendChild(btn);
   }
 }
-
-var _cn="",_ce="";
-function dishCard(it){
-  var th=(it.i&&IMG[it.i])?"<img class=\"dish-img\" src=\""+IMG[it.i]+"\" alt=\"\"/>":"<div class=\"dish-icon\">"+_ce+"</div>";
-  var h="<div class=\"dish\">"+th+"<div class=\"dish-info\"><div class=\"dish-name\">"+it.n+"</div><div class=\"dish-cat\">"+_cn+"</div><div class=\"dish-price\">"+it.p+"</div>";
-  if(it.p2) h+="<div class=\"dish-price2\">"+it.p2+"</div>";
-  if(it.d) h+="<div class=\"dish-desc\">"+it.d+"</div>";
-  if(it.top) h+="<div class=\"dish-top\">"+it.top+"</div>";
-  return h+"</div></div>";
-}
-function renderItems(items){var h="";for(var k=0;k<items.length;k++)h+=dishCard(items[k]);return h;}
 
 function openCat(key){
   var d=MENU[key]; if(!d) return;
@@ -795,20 +770,6 @@ function showAdminSection(sec){
 function buildAdminPanel(){
   var body=document.getElementById("adminBody");
   body.innerHTML="";
-  /* ── PROMO IMAGES SECTION ── */
-  var promoSec=document.createElement("div");
-  promoSec.className="admin-section";
-  var promoHdr=document.createElement("div");
-  promoHdr.className="admin-section-hdr";
-  promoHdr.innerHTML="<div class=\"admin-section-title\">&#127754; Imagenes del Carrusel</div><span style=\"color:rgba(255,255,255,.3);font-size:12px;\">&#9660;</span>";
-  var promoBdy=document.createElement("div");
-  promoBdy.className="admin-section-body";
-  promoBdy.id="promoBdy";
-  promoHdr.addEventListener("click",function(){promoBdy.classList.toggle("open");if(promoBdy.classList.contains("open"))loadPromoAdmin();});
-  promoSec.appendChild(promoHdr);
-  promoSec.appendChild(promoBdy);
-  body.appendChild(promoSec);
-
   var keys=Object.keys(MENU);
   for(var i=0;i<keys.length;i++){
     var k=keys[i];
@@ -822,7 +783,6 @@ function buildAdminPanel(){
     var bdy=document.createElement("div");
     bdy.className="admin-section-body";
     (function(bd){hdr.addEventListener("click",function(){bd.classList.toggle("open");});})(bdy);
-    /* items */
     for(var j=0;j<items.length;j++){
       (function(catKey,idx,it){
         var row=document.createElement("div");
@@ -830,7 +790,6 @@ function buildAdminPanel(){
         row.id="adrow-"+catKey+"-"+idx;
         var nameEl=document.createElement("div"); nameEl.className="admin-dish-name"; nameEl.textContent=it.n;
         var prEl=document.createElement("div"); prEl.className="admin-dish-price"; prEl.textContent=it.p;
-        /* dom toggle */
         var tog=document.createElement("div");
         tog.className="admin-dom-toggle"+(it.dom?" on":"");
         tog.title="Disponible en domicilio";
@@ -858,7 +817,6 @@ function buildAdminPanel(){
         bdy.appendChild(row);
       })(k,j,items[j]);
     }
-    /* add button */
     var addBtn=document.createElement("button");
     addBtn.className="btn-add";
     addBtn.textContent="+ Agregar plato a "+d.n;
