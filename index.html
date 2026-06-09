@@ -239,7 +239,7 @@ footer{background:#050d06;border-top:1px solid rgba(200,168,75,.18);padding:40px
 <div id="adminLogin"><div class="login-box"><div class="login-title">Panel Admin</div><div class="login-sub">Eywa Cafe Restaurante</div><input class="login-input" id="admPwd" type="password" placeholder="Clave" onkeydown="if(event.key==='Enter')checkPwd()"/><div class="login-err" id="admErr"></div><button class="btn-login" onclick="checkPwd()">ENTRAR</button><br><button class="btn-login-cancel" onclick="closeLogin()">Cancelar</button></div></div>
 <div id="adminPanel"><div class="adm-nav"><div class="adm-title">&#9881; Admin Eywa</div><button class="btn-exit" onclick="exitAdmin()">Salir</button></div><div id="admHome"><div class="adm-home-sub">Que deseas editar?</div><button class="adm-opt" onclick="showAdmSub('carrusel')"><span class="adm-opt-icon">&#127754;</span><div><div class="adm-opt-title">Carrusel de Promos</div><div class="adm-opt-sub">Agregar, cambiar o eliminar imagenes</div></div></button><button class="adm-opt" onclick="showAdmSub('menu')"><span class="adm-opt-icon">&#127869;</span><div><div class="adm-opt-title">Editar Menu</div><div class="adm-opt-sub">Agregar, editar o eliminar platos</div></div></button></div>
 <div id="admCarrusel" class="adm-sub"><div class="adm-sub-nav"><button class="btn-back" onclick="showAdmSub(null)">&#8592; Volver</button><span class="adm-sub-title">Carrusel</span></div><div id="promoList"></div><label class="btn-add-promo">+ Agregar imagen<input type="file" accept="image/*" class="file-hidden" onchange="addPromo(this)"/></label></div>
-<div id="admMenu" class="adm-sub"><div class="adm-sub-nav"><button class="btn-back" onclick="showAdmSub(null)">&#8592; Volver</button><span class="adm-sub-title">Editar Menu</span></div><div id="admMenuList"></div></div>
+<div id="admMenu" class="adm-sub"><div class="adm-sub-nav"><button class="btn-back" onclick="showAdmSub(null)">&#8592; Volver</button><span class="adm-sub-title">Editar Menu</span></div><button onclick="resetAllDom()" style="margin:10px 16px 0;width:calc(100% - 32px);padding:10px;background:rgba(200,50,50,.15);border:1px solid rgba(200,50,50,.4);border-radius:30px;color:rgba(255,100,100,.9);font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">&#9888; Deshabilitar todos los domicilios</button><div id="admMenuList"></div></div>
 </div>
 <div id="editModal"><div class="edit-box"><div class="edit-title" id="editTitle">Editar Plato</div><div class="edit-row"><label class="edit-lbl">Nombre del plato *</label><input class="edit-input" id="eName" type="text"/></div><div class="edit-row"><label class="edit-lbl">Precio * (ej: $25.000)</label><input class="edit-input" id="ePrice" type="text"/></div><div class="edit-row"><label class="edit-lbl">Descripcion</label><textarea class="edit-input" id="eDesc" rows="2" style="resize:none;"></textarea></div><div class="edit-row"><label class="edit-lbl">Precio 2 (opcional)</label><input class="edit-input" id="ePrice2" type="text" placeholder="Ej: $90.000 botella"/></div><div class="edit-check"><input type="checkbox" id="eDom"/><label for="eDom">Disponible para domicilio</label></div><div class="edit-btns"><button class="btn-save" onclick="saveEdit()">GUARDAR</button><button class="btn-cancel-edit" onclick="closeEdit()">Cancelar</button></div></div></div>
 <div class="toast" id="toast"></div>
@@ -656,6 +656,18 @@ function checkPwd(){
   }
 }
 function exitAdmin(){document.getElementById("adminPanel").classList.remove("on");}
+function resetAllDom(){
+  if(!confirm("¿Deshabilitar TODOS los platos del domicilio?")) return;
+  var keys=Object.keys(MENU);
+  keys.forEach(function(k){
+    var d=MENU[k];
+    if(d.items){ d.items.forEach(function(it){it.dom=false;}); }
+    else if(d.secs){ d.secs.forEach(function(s){ s.items.forEach(function(it){it.dom=false;}); }); }
+    saveMenuCat(k);
+  });
+  showToast("Todos los domicilios deshabilitados");
+  renderAdminMenu();
+}
 
 function showAdmSub(sub){
   document.getElementById("admHome").style.display=sub===null?"block":"none";
@@ -827,7 +839,7 @@ function openEdit(catKey,idx,it){
   document.getElementById("ePrice").value=it?it.p:"";
   document.getElementById("eDesc").value=it?(it.d||""):"";
   document.getElementById("ePrice2").value=it?(it.p2||""):"";
-  document.getElementById("eDom").checked=it?(it.dom===true):false;
+  document.getElementById("eDom").checked=it?(it.dom!==false):true;
   document.getElementById("editModal").classList.add("on");
 }
 function closeEdit(){document.getElementById("editModal").classList.remove("on");}
