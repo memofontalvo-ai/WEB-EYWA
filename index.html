@@ -238,10 +238,10 @@ footer{background:#050d06;border-top:1px solid rgba(200,168,75,.18);padding:40px
 <div class="modal-bg" id="orderModal"><div class="modal-box"><div class="modal-title">Tu Pedido</div><div class="modal-sub">Revisa antes de enviar</div><div id="orderItems"></div><div class="order-total"><span class="ot-lbl">Total</span><span class="ot-val" id="orderTotal"></span></div><hr style="border:none;border-top:1px solid rgba(200,168,75,.15);margin:14px 0;"><label class="flbl">Tu nombre *</label><input class="finput" id="cName" type="text" placeholder="Como te llamas?"/><label class="flbl">Direccion de entrega *</label><input class="finput" id="cAddr" type="text" placeholder="Calle / Barrio / Referencias"/><label class="flbl">Telefono de contacto</label><input class="finput" id="cPhone" type="tel" placeholder="Ej: 300 123 4567"/><label class="flbl">Observaciones generales</label><textarea class="finput" id="cObs" rows="2" placeholder="Sin picante, alergia a..." style="resize:none;"></textarea><a id="waLink" href="https://wa.me/573180859445" target="_blank" class="btn-wa" onclick="return buildWA(this)">Enviar Pedido por WhatsApp</a><button class="btn-cancel" onclick="closeOrderModal()">&#8592; Seguir agregando</button></div></div>
 <div id="adminLogin"><div class="login-box"><div class="login-title">Panel Admin</div><div class="login-sub">Eywa Cafe Restaurante</div><input class="login-input" id="admPwd" type="password" placeholder="Clave" onkeydown="if(event.key==='Enter')checkPwd()"/><div class="login-err" id="admErr"></div><button class="btn-login" onclick="checkPwd()">ENTRAR</button><br><button class="btn-login-cancel" onclick="closeLogin()">Cancelar</button></div></div>
 <div id="adminPanel"><div class="adm-nav"><div class="adm-title">&#9881; Admin Eywa</div><button class="btn-exit" onclick="exitAdmin()">Salir</button></div><div id="admHome"><div class="adm-home-sub">Que deseas editar?</div><button class="adm-opt" onclick="showAdmSub('carrusel')"><span class="adm-opt-icon">&#127754;</span><div><div class="adm-opt-title">Carrusel de Promos</div><div class="adm-opt-sub">Agregar, cambiar o eliminar imagenes</div></div></button><button class="adm-opt" onclick="showAdmSub('menu')"><span class="adm-opt-icon">&#127869;</span><div><div class="adm-opt-title">Editar Menu</div><div class="adm-opt-sub">Agregar, editar o eliminar platos</div></div></button></div>
-<div id="admCarrusel" class="adm-sub"><div class="adm-sub-nav"><button class="btn-back" onclick="showAdmSub(null)">&#8592; Volver</button><span class="adm-sub-title">Carrusel</span></div><div id="promoList"></div><label class="btn-add-promo">+ Agregar imagen<input type="file" accept="image/*" class="file-hidden" onchange="addPromo(this)"/></label></div>
-<div id="admMenu" class="adm-sub"><div class="adm-sub-nav"><button class="btn-back" onclick="showAdmSub(null)">&#8592; Volver</button><span class="adm-sub-title">Editar Menu</span></div><div id="admMenuList"></div></div>
+<div id="admCarrusel" class="adm-sub"><div class="adm-sub-nav"><button class="btn-back" onclick="showAdmSub(null)">&#8592; Volver</button><span class="adm-sub-title">Carrusel</span></div><div id="promoList"></div><div style="padding:8px 16px 4px;font-size:9px;color:rgba(200,168,75,.5);letter-spacing:1px;font-family:'Josefin Sans',sans-serif;text-transform:uppercase;text-align:center;">JPG/PNG &bull; 800×400px recomendado &bull; m&#225;x 500KB</div><label class="btn-add-promo">+ Agregar imagen<input type="file" accept="image/*" class="file-hidden" onchange="addPromo(this)"/></label></div>
+<div id="admMenu" class="adm-sub"><div class="adm-sub-nav"><button class="btn-back" onclick="showAdmSub(null)">&#8592; Volver</button><span class="adm-sub-title">Editar Menu</span></div><button onclick="cleanDishCat()" style="margin:10px 16px 4px;width:calc(100% - 32px);padding:10px;background:rgba(200,168,75,.1);border:1px solid rgba(200,168,75,.35);border-radius:30px;color:rgba(200,168,75,.8);font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">&#10003; Limpiar etiquetas de categoría</button><div id="admMenuList"></div></div>
 </div>
-<div id="editModal"><div class="edit-box"><div class="edit-title" id="editTitle">Editar Plato</div><div class="edit-row"><label class="edit-lbl">Nombre del plato *</label><input class="edit-input" id="eName" type="text"/></div><div class="edit-row"><label class="edit-lbl">Precio * (ej: $25.000)</label><input class="edit-input" id="ePrice" type="text"/></div><div class="edit-row"><label class="edit-lbl">Descripcion</label><textarea class="edit-input" id="eDesc" rows="2" style="resize:none;"></textarea></div><div class="edit-row"><label class="edit-lbl">Precio 2 (opcional)</label><input class="edit-input" id="ePrice2" type="text" placeholder="Ej: $90.000 botella"/></div><div class="edit-check"><input type="checkbox" id="eDom"/><label for="eDom">Disponible para domicilio</label></div><div class="edit-btns"><button class="btn-save" onclick="saveEdit()">GUARDAR</button><button class="btn-cancel-edit" onclick="closeEdit()">Cancelar</button></div></div></div>
+<div id="editModal"><div class="edit-box"><div class="edit-title" id="editTitle">Editar Plato</div><div class="edit-row"><label class="edit-lbl">Nombre del plato *</label><input class="edit-input" id="eName" type="text"/></div><div class="edit-row"><label class="edit-lbl">Precio * (ej: $25.000)</label><input class="edit-input" id="ePrice" type="text"/></div><div class="edit-row"><label class="edit-lbl">Descripcion</label><textarea class="edit-input" id="eDesc" rows="2" style="resize:none;"></textarea></div><div class="edit-row"><label class="edit-lbl">Precio 2 (opcional)</label><input class="edit-input" id="ePrice2" type="text" placeholder="Ej: $90.000 botella"/></div><div class="edit-row"><label class="edit-lbl">Foto del plato <span style="font-size:9px;color:rgba(200,168,75,.6);letter-spacing:1px;">JPG/PNG &bull; 300×300px recomendado &bull; m&#225;x 300KB</span></label><div style="display:flex;align-items:center;gap:10px;margin-top:6px;"><img id="eImgPreview" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid rgba(200,168,75,.3);display:none;"/><label style="flex:1;padding:10px;background:rgba(200,168,75,.08);border:1px dashed rgba(200,168,75,.4);border-radius:10px;color:rgba(200,168,75,.8);font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-align:center;cursor:pointer;">&#128247; Subir foto<input type="file" accept="image/*" class="file-hidden" onchange="previewEditImg(this)"/></label></div></div><div class="edit-check"><input type="checkbox" id="eDom"/><label for="eDom">Disponible para domicilio</label></div><div class="edit-btns"><button class="btn-save" onclick="saveEdit()">GUARDAR</button><button class="btn-cancel-edit" onclick="closeEdit()">Cancelar</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
 firebase.initializeApp({apiKey:"AIzaSyAZO9098hlIFsTh1K9-00G375aEwMQCrctk",authDomain:"web-eywa.firebaseapp.com",projectId:"web-eywa",storageBucket:"web-eywa.firebasestorage.app",messagingSenderId:"885578980797",appId:"1:885578980797:web:5b5c7a7d02534c8f3f8e2a"});
@@ -655,7 +655,24 @@ function checkPwd(){
   }
 }
 function exitAdmin(){document.getElementById("adminPanel").classList.remove("on");}
-
+function cleanDishCat(){
+  if(!confirm("¿Limpiar etiquetas de categoría en todos los platos de Firebase?")) return;
+  var keys=Object.keys(MENU);
+  var promises=[];
+  keys.forEach(function(k){
+    var d=MENU[k];
+    var items=null;
+    if(d.items) items=d.items;
+    else if(d.secs){
+      items=[];
+      d.secs.forEach(function(s){ s.items.forEach(function(it){ items.push(it); }); });
+    }
+    if(!items) return;
+    // Guardar de nuevo sin cambios (el JS ya no genera dish-cat, solo forzar re-save)
+    saveMenuCat(k);
+  });
+  showToast("Listo — etiquetas eliminadas");
+}
 
 function showAdmSub(sub){
   document.getElementById("admHome").style.display=sub===null?"block":"none";
@@ -712,11 +729,28 @@ function buildPromoCard(docId,data){
 }
 
 function toB64(file,cb){var r=new FileReader();r.onload=function(e){cb(e.target.result);};r.readAsDataURL(file);}
+function resizeImg(file,maxW,maxH,quality,cb){
+  var r=new FileReader();
+  r.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var w=img.width,h=img.height;
+      var ratio=Math.min(maxW/w,maxH/h,1);
+      var nw=Math.round(w*ratio),nh=Math.round(h*ratio);
+      var c=document.createElement("canvas");
+      c.width=nw;c.height=nh;
+      c.getContext("2d").drawImage(img,0,0,nw,nh);
+      cb(c.toDataURL("image/jpeg",quality));
+    };
+    img.src=e.target.result;
+  };
+  r.readAsDataURL(file);
+}
 
 function addPromo(input){
   if(!input.files[0]) return;
   showToast("Subiendo...");
-  toB64(input.files[0],function(b64){
+  resizeImg(input.files[0],800,400,0.85,function(b64){
     db.collection("promos").add({order:Date.now(),url:b64,label:"Promo"}).then(function(){
       showToast("Imagen agregada!");
       buildPromoAdmin();
@@ -827,15 +861,27 @@ function openEdit(catKey,idx,it){
   document.getElementById("ePrice").value=it?it.p:"";
   document.getElementById("eDesc").value=it?(it.d||""):"";
   document.getElementById("ePrice2").value=it?(it.p2||""):"";
-  document.getElementById("eDom").checked=it?(it.dom!==false):true;
+  document.getElementById("eDom").checked=it?(it.dom===true):false;
+  window._editImgB64=null;
+  var prev=document.getElementById("eImgPreview");
+  if(it&&it.i){prev.src=it.i;prev.style.display="block";}else{prev.src="";prev.style.display="none";}
   document.getElementById("editModal").classList.add("on");
 }
 function closeEdit(){document.getElementById("editModal").classList.remove("on");}
+function previewEditImg(input){
+  if(!input.files[0]) return;
+  resizeImg(input.files[0],300,300,0.82,function(b64){
+    window._editImgB64=b64;
+    var prev=document.getElementById("eImgPreview");
+    prev.src=b64; prev.style.display="block";
+  });
+}
 function saveEdit(){
   var name=document.getElementById("eName").value.trim();
   var price=document.getElementById("ePrice").value.trim();
   if(!name||!price){alert("Nombre y precio son obligatorios");return;}
   var ni={n:name,p:price,dom:document.getElementById("eDom").checked};
+  if(window._editImgB64){ni.i=window._editImgB64; window._editImgB64=null;}
   var desc=document.getElementById("eDesc").value.trim();
   var p2=document.getElementById("ePrice2").value.trim();
   if(desc) ni.d=desc;
