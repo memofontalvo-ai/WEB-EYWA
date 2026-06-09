@@ -189,6 +189,11 @@ footer{background:#050d06;border-top:1px solid rgba(200,168,75,.18);padding:36px
 .edit-btns{display:flex;gap:10px;margin-top:16px;}
 .btn-save{flex:1;padding:12px;background:rgba(200,168,75,.15);border:1.5px solid var(--gold);border-radius:30px;color:var(--gold);font-family:"Josefin Sans",sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;cursor:pointer;}
 .btn-cancel-edit{flex:1;padding:12px;background:transparent;border:1px solid rgba(255,255,255,.14);border-radius:30px;color:rgba(255,255,255,.45);font-family:"Josefin Sans",sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;}
+.promo-admin-card{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);margin-bottom:8px;}
+.promo-admin-img{width:80px;height:50px;border-radius:7px;object-fit:cover;flex-shrink:0;background:rgba(255,255,255,.05);}
+.promo-admin-info{flex:1;font-family:"Josefin Sans",sans-serif;font-size:12px;color:rgba(255,255,255,.7);letter-spacing:1px;}
+.promo-upload{display:none;}
+.btn-upload{background:rgba(200,168,75,.1);border:1px dashed rgba(200,168,75,.4);color:var(--gold);font-family:"Josefin Sans",sans-serif;font-size:11px;letter-spacing:2px;padding:12px;border-radius:10px;cursor:pointer;width:100%;text-align:center;margin-top:6px;}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(200,168,75,.95);color:#0a1208;font-family:"Josefin Sans",sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;padding:10px 20px;border-radius:30px;z-index:700;opacity:0;transition:opacity .3s;}
 .toast.show{opacity:1;}
 </style>
@@ -536,6 +541,20 @@ function getItems(d){
 function buildCatGrid(){
   var g=document.getElementById("catGrid");
   g.innerHTML="";
+  /* ── PROMO IMAGES SECTION ── */
+  var promoSec=document.createElement("div");
+  promoSec.className="admin-section";
+  var promoHdr=document.createElement("div");
+  promoHdr.className="admin-section-hdr";
+  promoHdr.innerHTML="<div class=\"admin-section-title\">&#127754; Imagenes del Carrusel</div><span style=\"color:rgba(255,255,255,.3);font-size:12px;\">&#9660;</span>";
+  var promoBdy=document.createElement("div");
+  promoBdy.className="admin-section-body";
+  promoBdy.id="promoBdy";
+  promoHdr.addEventListener("click",function(){promoBdy.classList.toggle("open");if(promoBdy.classList.contains("open"))loadPromoAdmin();});
+  promoSec.appendChild(promoHdr);
+  promoSec.appendChild(promoBdy);
+  body.appendChild(promoSec);
+
   var keys=Object.keys(MENU);
   for(var i=0;i<keys.length;i++){
     var k=keys[i];
@@ -580,6 +599,20 @@ var cart={}, domCat="desayunos";
 function buildDomTabs(){
   var tabs=document.getElementById("domTabs");
   tabs.innerHTML="";
+  /* ── PROMO IMAGES SECTION ── */
+  var promoSec=document.createElement("div");
+  promoSec.className="admin-section";
+  var promoHdr=document.createElement("div");
+  promoHdr.className="admin-section-hdr";
+  promoHdr.innerHTML="<div class=\"admin-section-title\">&#127754; Imagenes del Carrusel</div><span style=\"color:rgba(255,255,255,.3);font-size:12px;\">&#9660;</span>";
+  var promoBdy=document.createElement("div");
+  promoBdy.className="admin-section-body";
+  promoBdy.id="promoBdy";
+  promoHdr.addEventListener("click",function(){promoBdy.classList.toggle("open");if(promoBdy.classList.contains("open"))loadPromoAdmin();});
+  promoSec.appendChild(promoHdr);
+  promoSec.appendChild(promoBdy);
+  body.appendChild(promoSec);
+
   var keys=Object.keys(MENU);
   for(var i=0;i<keys.length;i++){
     var k=keys[i];
@@ -713,6 +746,20 @@ function openAdminPanel(){
 function buildAdminPanel(){
   var body=document.getElementById("adminBody");
   body.innerHTML="";
+  /* ── PROMO IMAGES SECTION ── */
+  var promoSec=document.createElement("div");
+  promoSec.className="admin-section";
+  var promoHdr=document.createElement("div");
+  promoHdr.className="admin-section-hdr";
+  promoHdr.innerHTML="<div class=\"admin-section-title\">&#127754; Imagenes del Carrusel</div><span style=\"color:rgba(255,255,255,.3);font-size:12px;\">&#9660;</span>";
+  var promoBdy=document.createElement("div");
+  promoBdy.className="admin-section-body";
+  promoBdy.id="promoBdy";
+  promoHdr.addEventListener("click",function(){promoBdy.classList.toggle("open");if(promoBdy.classList.contains("open"))loadPromoAdmin();});
+  promoSec.appendChild(promoHdr);
+  promoSec.appendChild(promoBdy);
+  body.appendChild(promoSec);
+
   var keys=Object.keys(MENU);
   for(var i=0;i<keys.length;i++){
     var k=keys[i];
@@ -821,6 +868,159 @@ function saveMenuCat(catKey){
   else if(d.secs) payload.secs=d.secs;
   db.collection("menu").doc(catKey).set(payload).catch(function(e){console.log("Save error:",e);});
 }
+
+/* ── PROMO ADMIN ── */
+function loadPromoAdmin(){
+  var bdy=document.getElementById("promoBdy");
+  bdy.innerHTML="<div style=\"padding:10px;color:rgba(255,255,255,.4);font-size:12px;text-align:center;\">Cargando...</div>";
+  db.collection("promos").orderBy("order").get().then(function(snap){
+    bdy.innerHTML="";
+    if(snap.empty){
+      /* seed with current 3 promos */
+      seedPromos();
+    } else {
+      snap.forEach(function(doc){
+        var d=doc.data();
+        bdy.appendChild(buildPromoCard(doc.id,d));
+      });
+    }
+    /* add new promo button */
+    var addBtn=document.createElement("label");
+    addBtn.className="btn-upload";
+    addBtn.innerHTML="+ Agregar nueva imagen de promocion";
+    var fileIn=document.createElement("input");
+    fileIn.type="file"; fileIn.accept="image/*"; fileIn.className="promo-upload";
+    fileIn.addEventListener("change",function(){
+      if(this.files[0]) uploadPromo(this.files[0], snap.size);
+    });
+    addBtn.appendChild(fileIn);
+    bdy.appendChild(addBtn);
+  }).catch(function(){ seedPromos(); });
+}
+
+function seedPromos(){
+  /* save current 3 base64 promos to Firebase */
+  var promos=[
+    {order:0,url:document.querySelector(".car-slide:nth-child(1) img").src,label:"Promo 1"},
+    {order:1,url:document.querySelector(".car-slide:nth-child(2) img").src,label:"Promo 2"},
+    {order:2,url:document.querySelector(".car-slide:nth-child(3) img").src,label:"Promo 3"}
+  ];
+  var batch=db.batch();
+  promos.forEach(function(p,i){
+    batch.set(db.collection("promos").doc("promo"+i),p);
+  });
+  batch.commit().then(function(){loadPromoAdmin();});
+}
+
+function buildPromoCard(docId,data){
+  var card=document.createElement("div");
+  card.className="promo-admin-card";
+  var img=document.createElement("img");
+  img.className="promo-admin-img";
+  img.src=data.url; img.alt=data.label||"";
+  var info=document.createElement("div");
+  info.className="promo-admin-info";
+  info.textContent=data.label||"Promo";
+  var btns=document.createElement("div"); btns.className="admin-btns";
+  /* replace image */
+  var replLabel=document.createElement("label");
+  replLabel.className="btn-edit"; replLabel.textContent="Cambiar";
+  var replIn=document.createElement("input");
+  replIn.type="file"; replIn.accept="image/*"; replIn.className="promo-upload";
+  replIn.addEventListener("change",(function(id,lbl){
+    return function(){
+      if(this.files[0]) replacePromo(id,this.files[0],lbl);
+    };
+  })(docId,data.label));
+  replLabel.appendChild(replIn);
+  /* delete */
+  var delBtn=document.createElement("button");
+  delBtn.className="btn-del"; delBtn.textContent="Borrar";
+  delBtn.addEventListener("click",(function(id){
+    return function(){
+      if(confirm("Borrar esta imagen del carrusel?")) deletePromo(id);
+    };
+  })(docId));
+  btns.appendChild(replLabel); btns.appendChild(delBtn);
+  card.appendChild(img); card.appendChild(info); card.appendChild(btns);
+  return card;
+}
+
+function readFileAsBase64(file,cb){
+  var reader=new FileReader();
+  reader.onload=function(e){cb(e.target.result);};
+  reader.readAsDataURL(file);
+}
+
+function uploadPromo(file,currentCount){
+  showToast("Subiendo imagen...");
+  readFileAsBase64(file,function(b64){
+    var docId="promo"+Date.now();
+    db.collection("promos").doc(docId).set({
+      order:currentCount,
+      url:b64,
+      label:"Promo "+(currentCount+1)
+    }).then(function(){
+      showToast("Imagen agregada!");
+      loadPromoAdmin();
+      reloadCarousel();
+    });
+  });
+}
+
+function replacePromo(docId,file,label){
+  showToast("Actualizando...");
+  readFileAsBase64(file,function(b64){
+    db.collection("promos").doc(docId).update({url:b64}).then(function(){
+      showToast("Imagen actualizada!");
+      loadPromoAdmin();
+      reloadCarousel();
+    });
+  });
+}
+
+function deletePromo(docId){
+  db.collection("promos").doc(docId).delete().then(function(){
+    showToast("Imagen eliminada");
+    loadPromoAdmin();
+    reloadCarousel();
+  });
+}
+
+function reloadCarousel(){
+  db.collection("promos").orderBy("order").get().then(function(snap){
+    var track=document.getElementById("carTrack");
+    var dots=document.getElementById("carDots");
+    track.innerHTML="";
+    dots.innerHTML="";
+    carTotal=0;
+    snap.forEach(function(doc){
+      var d=doc.data();
+      var slide=document.createElement("div");
+      slide.className="car-slide";
+      var img=document.createElement("img");
+      img.src=d.url; img.alt=d.label||"";
+      slide.appendChild(img);
+      track.appendChild(slide);
+      var dot=document.createElement("span");
+      dot.className="car-dot"+(carTotal===0?" on":"");
+      dots.appendChild(dot);
+      carTotal++;
+    });
+    carIdx=0;
+    track.style.transform="translateX(0)";
+  });
+}
+
+/* Load promos from Firebase on start */
+function initPromos(){
+  db.collection("promos").orderBy("order").get().then(function(snap){
+    if(!snap.empty){
+      reloadCarousel();
+    }
+  }).catch(function(){});
+}
+initPromos();
 
 /* ── TOAST ── */
 function showToast(msg){
