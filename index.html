@@ -202,6 +202,12 @@ footer{background:rgba(5,13,6,.65);backdrop-filter:blur(8px);border-top:1px soli
 .adm-dish{display:flex;align-items:center;gap:8px;padding:8px;border-radius:9px;border:1px solid rgba(255,255,255,.07);margin-bottom:6px;background:rgba(0,0,0,.3);}
 .adm-dish-name{font-family:"Josefin Sans",sans-serif;font-size:13px;color:#fff;flex:1;font-weight:600;}
 .adm-dish-price{font-size:11px;color:var(--gold2);margin-right:4px;letter-spacing:.5px;}
+.tog-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tog-lbl{font-size:8px;letter-spacing:1px;color:rgba(255,255,255,.9);font-family:"Josefin Sans",sans-serif;text-transform:uppercase;}
+.carta-tog{width:40px;height:22px;border-radius:11px;background:rgba(255,255,255,.15);cursor:pointer;position:relative;transition:background .25s;border:none;padding:0;flex-shrink:0;}
+.carta-tog.on{background:#c8a84b;}
+.carta-tog::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .25s;}
+.carta-tog.on::after{left:21px;}
 .dom-tog{width:38px;height:22px;border-radius:11px;background:rgba(255,255,255,.15);position:relative;cursor:pointer;flex-shrink:0;transition:background .2s;}
 .dom-tog.on{background:var(--green);}
 .dom-tog::after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.4);}
@@ -247,7 +253,7 @@ body::after{content:"";position:fixed;bottom:0;left:0;right:0;height:45vh;backgr
 <div id="admCarrusel" class="adm-sub"><div class="adm-sub-nav"><button class="btn-back" onclick="showAdmSub(null)">&#8592; Volver</button><span class="adm-sub-title">Carrusel</span></div><div id="promoList"></div><div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px;align-items:center;"><p style="font-size:9px;color:rgba(200,168,75,.95);letter-spacing:1.5px;font-family:'Josefin Sans',sans-serif;text-transform:uppercase;text-align:center;margin:0;">JPG / PNG &bull; 800×400px recomendado &bull; m&#225;x 500KB</p><label class="btn-add-promo" style="width:100%;text-align:center;">+ Agregar imagen<input type="file" accept="image/*" class="file-hidden" onchange="addPromo(this)"/></label></div></div>
 <div id="admMenu" class="adm-sub"><div class="adm-sub-nav"><button class="btn-back" onclick="showAdmSub(null)">&#8592; Volver</button><span class="adm-sub-title">Editar Menu</span></div><div id="admMenuList"></div></div>
 </div>
-<div id="editModal"><div class="edit-box"><div class="edit-title" id="editTitle">Editar Plato</div><div class="edit-row"><label class="edit-lbl">Nombre del plato *</label><input class="edit-input" id="eName" type="text"/></div><div class="edit-row"><label class="edit-lbl">Precio * (ej: $25.000)</label><input class="edit-input" id="ePrice" type="text"/></div><div class="edit-row"><label class="edit-lbl">Descripcion</label><textarea class="edit-input" id="eDesc" rows="2" style="resize:none;"></textarea></div><div class="edit-row"><label class="edit-lbl">Precio 2 (opcional)</label><input class="edit-input" id="ePrice2" type="text" placeholder="Ej: $90.000 botella"/></div><div class="edit-row"><label class="edit-lbl">Foto del plato <span style="font-size:9px;color:#c8a84b;letter-spacing:1px;">JPG/PNG &bull; 300×300px recomendado &bull; m&#225;x 300KB</span></label><div style="display:flex;align-items:center;gap:10px;margin-top:6px;"><img id="eImgPreview" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid rgba(200,168,75,.3);display:none;"/><label style="flex:1;padding:10px;background:rgba(200,168,75,.08);border:1px dashed rgba(200,168,75,.4);border-radius:10px;color:rgba(200,168,75,.8);font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-align:center;cursor:pointer;">&#128247; Subir foto<input type="file" accept="image/*" class="file-hidden" onchange="previewEditImg(this)"/></label></div></div><div class="edit-check"><input type="checkbox" id="eDom"/><label for="eDom">Disponible para domicilio</label></div><div class="edit-btns"><button class="btn-save" onclick="saveEdit()">GUARDAR</button><button class="btn-cancel-edit" onclick="closeEdit()">Cancelar</button></div></div></div>
+<div id="editModal"><div class="edit-box"><div class="edit-title" id="editTitle">Editar Plato</div><div class="edit-row"><label class="edit-lbl">Nombre del plato *</label><input class="edit-input" id="eName" type="text"/></div><div class="edit-row"><label class="edit-lbl">Precio * (ej: $25.000)</label><input class="edit-input" id="ePrice" type="text"/></div><div class="edit-row"><label class="edit-lbl">Descripcion</label><textarea class="edit-input" id="eDesc" rows="2" style="resize:none;"></textarea></div><div class="edit-row"><label class="edit-lbl">Precio 2 (opcional)</label><input class="edit-input" id="ePrice2" type="text" placeholder="Ej: $90.000 botella"/></div><div class="edit-row"><label class="edit-lbl">Foto del plato <span style="font-size:9px;color:#c8a84b;letter-spacing:1px;">JPG/PNG &bull; 300×300px recomendado &bull; m&#225;x 300KB</span></label><div style="display:flex;align-items:center;gap:10px;margin-top:6px;"><img id="eImgPreview" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid rgba(200,168,75,.3);display:none;"/><label style="flex:1;padding:10px;background:rgba(200,168,75,.08);border:1px dashed rgba(200,168,75,.4);border-radius:10px;color:rgba(200,168,75,.8);font-family:'Josefin Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-align:center;cursor:pointer;">&#128247; Subir foto<input type="file" accept="image/*" class="file-hidden" onchange="previewEditImg(this)"/></label></div></div><div class="edit-check"><input type="checkbox" id="eActivo" checked/><label for="eActivo">Visible en la carta</label></div><div class="edit-check"><input type="checkbox" id="eDom"/><label for="eDom">Disponible para domicilio</label></div><div class="edit-btns"><button class="btn-save" onclick="saveEdit()">GUARDAR</button><button class="btn-cancel-edit" onclick="closeEdit()">Cancelar</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
 firebase.initializeApp({apiKey:"AIzaSyAZO9098hlIFsTh1K9-00G375aEwMQCrctk",authDomain:"web-eywa.firebaseapp.com",projectId:"web-eywa",storageBucket:"web-eywa.firebasestorage.app",messagingSenderId:"885578980797",appId:"1:885578980797:web:5b5c7a7d02534c8f3f8e2a"});
@@ -490,6 +496,7 @@ function buildCatGrid(){
 /* ── OPEN CATEGORY ── */
 var _cn="", _ce="";
 function dishHTML(it){
+  if(it.activo===false) return "";
   var img=(it.i&&IMG[it.i])?"<img class=\"dish-img\" src=\""+IMG[it.i]+"\" alt=\"\"/>":"<div class=\"dish-icon\">"+_ce+"</div>";
   var h="<div class=\"dish\">"+img+"<div class=\"dish-info\"><div class=\"dish-name\">"+it.n+"</div>";
   h+="<div class=\"dish-price\">"+it.p+"</div>";
@@ -850,9 +857,23 @@ function buildMenuAdmin(){
         var row=document.createElement("div"); row.className="adm-dish";
         var nm=document.createElement("div"); nm.className="adm-dish-name"; nm.textContent=it.n;
         var pr=document.createElement("div"); pr.className="adm-dish-price"; pr.textContent=it.p;
+        // Toggle carta
+        var wrapCarta=document.createElement("div"); wrapCarta.className="tog-wrap";
+        var lblCarta=document.createElement("span"); lblCarta.className="tog-lbl"; lblCarta.textContent="Carta";
+        var togCarta=document.createElement("button"); togCarta.className="carta-tog"+(it.activo!==false?" on":"");
+        togCarta.addEventListener("click",function(){
+          it.activo=it.activo===false?true:false;
+          togCarta.className="carta-tog"+(it.activo!==false?" on":"");
+          saveMenuCat(catKey);
+          showToast(it.activo!==false?"Visible en carta":"Oculto de carta");
+        });
+        wrapCarta.appendChild(lblCarta); wrapCarta.appendChild(togCarta);
+        // Toggle domicilio
+        var wrapDom=document.createElement("div"); wrapDom.className="tog-wrap";
+        var lblDom=document.createElement("span"); lblDom.className="tog-lbl"; lblDom.textContent="Dom";
         var tog=document.createElement("div"); tog.className="dom-tog"+(it.dom?" on":"");
-        tog.title="Activo en domicilio";
-        tog.addEventListener("click",function(){it.dom=!it.dom;tog.className="dom-tog"+(it.dom?" on":"");saveMenuCat(catKey);showToast(it.dom?"Activo en domicilio":"Desactivado");});
+        tog.addEventListener("click",function(){it.dom=!it.dom;tog.className="dom-tog"+(it.dom?" on":"");saveMenuCat(catKey);showToast(it.dom?"Activo en domicilio":"Desactivado domicilio");});
+        wrapDom.appendChild(lblDom); wrapDom.appendChild(tog);
         var btns=document.createElement("div"); btns.className="adm-btns";
         var eb=document.createElement("button"); eb.className="btn-edit"; eb.textContent="Editar";
         eb.addEventListener("click",function(){openEdit(catKey,idx,it);});
@@ -867,7 +888,7 @@ function buildMenuAdmin(){
           }
         });
         btns.appendChild(eb); btns.appendChild(db2);
-        row.appendChild(nm); row.appendChild(pr); row.appendChild(tog); row.appendChild(btns);
+        row.appendChild(nm); row.appendChild(pr); row.appendChild(wrapCarta); row.appendChild(wrapDom); row.appendChild(btns);
         bdy.appendChild(row);
       })(k,j,items[j]);
     }
@@ -890,6 +911,7 @@ function openEdit(catKey,idx,it){
   document.getElementById("eDesc").value=it?(it.d||""):"";
   document.getElementById("ePrice2").value=it?(it.p2||""):"";
   document.getElementById("eDom").checked=it?(it.dom===true):false;
+  document.getElementById("eActivo").checked=it?(it.activo!==false):true;
   window._editImgB64=null;
   var prev=document.getElementById("eImgPreview");
   if(it&&it.i){prev.src=it.i;prev.style.display="block";}else{prev.src="";prev.style.display="none";}
@@ -908,7 +930,7 @@ function saveEdit(){
   var name=document.getElementById("eName").value.trim();
   var price=document.getElementById("ePrice").value.trim();
   if(!name||!price){alert("Nombre y precio son obligatorios");return;}
-  var ni={n:name,p:price,dom:document.getElementById("eDom").checked};
+  var ni={n:name,p:price,dom:document.getElementById("eDom").checked,activo:document.getElementById("eActivo").checked};
   if(window._editImgB64){ni.i=window._editImgB64; window._editImgB64=null;}
   var desc=document.getElementById("eDesc").value.trim();
   var p2=document.getElementById("ePrice2").value.trim();
