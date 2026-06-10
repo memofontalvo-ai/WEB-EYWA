@@ -547,10 +547,10 @@ function buildDomCatGrid(){
     card.style.opacity=hasDom?"1":"0.4";
     var ico=document.createElement("div");
     ico.className="cat-ico";
-    ico.textContent=EMOJIS[k]||"🍽";
+    ico.innerHTML=EMOJIS[k]||"🍽";
     var lbl=document.createElement("div");
     lbl.className="cat-lbl";
-    lbl.textContent=d.n;
+    lbl.innerHTML=d.n;
     card.appendChild(ico);
     card.appendChild(lbl);
     (function(key,has){card.addEventListener("click",function(){
@@ -569,7 +569,7 @@ function buildDomItems(key){
   grid.innerHTML="";
   // Botón volver a categorías
   var backBtn=document.createElement("button");
-  backBtn.textContent="← "+MENU[key].n;
+  backBtn.innerHTML="← "+MENU[key].n;
   backBtn.style.cssText="margin-bottom:12px;background:rgba(200,168,75,.15);border:1px solid rgba(200,168,75,.4);border-radius:30px;color:#e8c97a;font-family:'Josefin Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:8px 18px;cursor:pointer;";
   backBtn.addEventListener("click",function(){
     grid.style.display="none";
