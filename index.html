@@ -788,7 +788,12 @@ function saveMenuCat(k){
   var d=MENU[k]; var pay={nota:d.nota||""};
   if(d.items) pay.items=d.items;
   else if(d.secs) pay.secs=d.secs;
-  db.collection("menu").doc(k).set(pay).catch(function(){});
+  db.collection("menu").doc(k).set(pay).then(function(){
+    console.log("Guardado en Firebase: "+k);
+  }).catch(function(err){
+    console.error("Error al guardar "+k+":",err);
+    showToast("Error al guardar. La categoría puede ser muy pesada (fotos grandes).");
+  });
 }
 syncFromFirebase();
 
@@ -1072,16 +1077,21 @@ function saveEdit(){
   var price=document.getElementById("ePrice").value.trim();
   if(!name||!price){alert("Nombre y precio son obligatorios");return;}
   var ni={n:name,p:price,dom:document.getElementById("eDom").checked,activo:document.getElementById("eActivo").checked};
-  if(window._editImgB64){ni.i=window._editImgB64; window._editImgB64=null;}
   var desc=document.getElementById("eDesc").value.trim();
   var p2=document.getElementById("ePrice2").value.trim();
   if(desc) ni.d=desc;
   if(p2) ni.p2=p2;
   var arr=getItems(MENU[_eCat]);
+  // Manejo de imagen: si subiste una nueva, usarla; si no, conservar la que ya tenía
+  if(window._editImgB64){
+    ni.i=window._editImgB64;
+    window._editImgB64=null;
+  } else if(_eIdx!==-1 && arr[_eIdx] && arr[_eIdx].i){
+    ni.i=arr[_eIdx].i;
+  }
   if(_eIdx===-1){
     arr.push(ni);
   } else {
-    if(arr[_eIdx]&&arr[_eIdx].i) ni.i=arr[_eIdx].i;
     arr[_eIdx]=ni;
   }
   saveMenuCat(_eCat);
