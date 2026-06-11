@@ -266,8 +266,8 @@ body::after{content:"";position:fixed;bottom:0;left:0;right:0;height:45vh;backgr
 .dom-ctrl{flex-wrap:nowrap;}
 </style>
 </head>
-<body>
-<div id="eventIntro" style="display:none;position:fixed;inset:0;z-index:9999;background:#000;">
+<body style="overflow:hidden;">
+<div id="eventIntro" style="display:block;position:fixed;inset:0;z-index:9999;background:#000;">
   <div id="eventTrack" style="position:absolute;inset:0;"></div>
   <div id="eventDots" style="position:absolute;bottom:96px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:3;"></div>
   <button onclick="closeEventIntro()" style="position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:4;background:rgba(0,0,0,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,.85);color:#fff;font-family:'Josefin Sans',sans-serif;font-size:15px;font-weight:700;letter-spacing:4px;text-transform:uppercase;padding:14px 48px;border-radius:40px;cursor:pointer;">Menu</button>
@@ -994,13 +994,22 @@ if(db){
   db.collection("promos").orderBy("order").get().then(function(snap){
     if(!snap.empty) reloadCarousel();
   }).catch(function(){});
-  loadEventIntro();
 }
+/* Portada de eventos: se ejecuta siempre, con o sin Firebase */
+loadEventIntro();
+// Seguridad: si Firebase no responde en 6s, no dejar al cliente en negro
+setTimeout(function(){
+  var intro=document.getElementById("eventIntro");
+  if(intro && intro.style.display!=="none" && (!EVENTS || EVENTS.length===0)){
+    hideEventIntro();
+  }
+},6000);
 
 /* ── PORTADA DE EVENTOS ── */
 var EVENTS=[], evIdx=0, evTimer=null;
 function loadEventIntro(){
-  if(!db){ return; }
+  // El overlay ya está visible en negro desde el inicio (evita parpadeo).
+  if(!db){ hideEventIntro(); return; }
   db.collection("eventos").orderBy("order").get().then(function(snap){
     EVENTS=[];
     snap.forEach(function(doc){
@@ -1008,7 +1017,13 @@ function loadEventIntro(){
       EVENTS.push({id:doc.id, img:d.img, order:d.order||0});
     });
     if(EVENTS.length>0){ showEventIntro(); }
-  }).catch(function(){});
+    else { hideEventIntro(); }
+  }).catch(function(){ hideEventIntro(); });
+}
+function hideEventIntro(){
+  var intro=document.getElementById("eventIntro");
+  if(intro) intro.style.display="none";
+  document.body.style.overflow="";
 }
 function showEventIntro(){
   var intro=document.getElementById("eventIntro");
