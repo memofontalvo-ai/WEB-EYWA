@@ -762,9 +762,9 @@ function syncFromFirebase(){
   if(!db) return;
   db.collection("menu").get().then(function(snap){
     if(snap.empty){
-      // Firebase realmente vacío (primera vez) → sembrar menú de fábrica una sola vez
-      console.warn("Base de datos vacía: sembrando menú inicial.");
-      saveMenuToFirebase();
+      // Base vacía: NO sobrescribir nada automáticamente (protege las fotos guardadas).
+      // El menú de fábrica solo se muestra en pantalla; se sembrará solo con acción manual del admin.
+      console.warn("Base de datos de menú vacía. Mostrando menú de fábrica sin guardar.");
       return;
     }
     snap.forEach(function(doc){
