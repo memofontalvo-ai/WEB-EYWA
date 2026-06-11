@@ -531,9 +531,17 @@ function buildCatGrid(){
 
 /* ── OPEN CATEGORY ── */
 var _cn="", _ce="";
+function resolveImg(it){
+  if(!it.i) return null;
+  // Si es base64 directo (foto subida) o una URL, usarla tal cual
+  if(it.i.indexOf("data:")===0 || it.i.indexOf("http")===0) return it.i;
+  // Si no, es una llave del diccionario IMG (imágenes de fábrica)
+  if(IMG[it.i]) return IMG[it.i];
+  return null;
+}
 function dishHTML(it){
   if(it.activo===false) return "";
-  var img=(it.i&&IMG[it.i])?"<img class=\"dish-img\" src=\""+IMG[it.i]+"\" alt=\"\"/>":"<div class=\"dish-icon\">"+_ce+"</div>";
+  var _ri=resolveImg(it); var img=_ri?"<img class=\"dish-img\" src=\""+_ri+"\" alt=\"\"/>":"<div class=\"dish-icon\">"+_ce+"</div>";
   var h="<div class=\"dish\">"+img+"<div class=\"dish-info\"><div class=\"dish-name\">"+it.n+"</div>";
   h+="<div class=\"dish-price\">"+it.p+"</div>";
   if(it.p2) h+="<div class=\"dish-price2\">"+it.p2+"</div>";
@@ -632,7 +640,7 @@ function buildDomItems(key){
     var card=document.createElement("div");
     card.className="dom-card";
     var imgEl;
-    if(it.i&&IMG[it.i]){imgEl=document.createElement("img");imgEl.className="dom-img";imgEl.src=IMG[it.i];imgEl.alt="";}
+    var _ri2=resolveImg(it); if(_ri2){imgEl=document.createElement("img");imgEl.className="dom-img";imgEl.src=_ri2;imgEl.alt="";}
     else{imgEl=document.createElement("div");imgEl.className="dom-noimg";imgEl.innerHTML=EMOJIS[key]||"+";}
     var info=document.createElement("div"); info.className="dom-info";
     var nn=document.createElement("div"); nn.className="dom-name"; nn.textContent=it.n; info.appendChild(nn);
@@ -1060,7 +1068,8 @@ function openEdit(catKey,idx,it){
   document.getElementById("eActivo").checked=it?(it.activo!==false):true;
   window._editImgB64=null;
   var prev=document.getElementById("eImgPreview");
-  if(it&&it.i){prev.src=it.i;prev.style.display="block";}else{prev.src="";prev.style.display="none";}
+  var _pri=it?resolveImg(it):null;
+  if(_pri){prev.src=_pri;prev.style.display="block";}else{prev.src="";prev.style.display="none";}
   document.getElementById("editModal").classList.add("on");
 }
 function closeEdit(){document.getElementById("editModal").classList.remove("on");}
