@@ -269,7 +269,7 @@ body::after{content:"";position:fixed;bottom:0;left:0;right:0;height:45vh;backgr
 </style>
 </head>
 <body style="overflow:hidden;">
-<div id="eventIntro" style="display:block;position:fixed;inset:0;z-index:9999;background:#000;display:flex;flex-direction:column;">
+<div id="eventIntro" style="position:fixed;inset:0;z-index:9999;background:#000;display:flex;flex-direction:column;">
   <div id="eventLoader" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border:3px solid rgba(200,168,75,.25);border-top-color:#c8a84b;border-radius:50%;animation:eventSpin .8s linear infinite;z-index:5;"></div>
   <div style="position:relative;flex:1;min-height:0;overflow:hidden;">
     <div id="eventTrack" style="position:absolute;inset:0;"></div>
@@ -1037,11 +1037,12 @@ function loadEventIntro(){
     EVENTS=[];
     snap.forEach(function(doc){
       var d=doc.data();
-      EVENTS.push({id:doc.id, img:d.img, order:d.order||0});
+      if(d.img){ EVENTS.push({id:doc.id, img:d.img, order:d.order||0}); }
     });
+    console.log("Eventos cargados:", EVENTS.length, EVENTS.map(function(e){return "img de "+Math.round((e.img?e.img.length:0)/1024)+"KB";}));
     if(EVENTS.length>0){ showEventIntro(); }
     else { hideEventIntro(); }
-  }).catch(function(){ hideEventIntro(); });
+  }).catch(function(err){ console.error("Error cargando eventos:",err); hideEventIntro(); });
 }
 function hideEventIntro(){
   var intro=document.getElementById("eventIntro");
@@ -1054,43 +1055,46 @@ function showEventIntro(){
   var intro=document.getElementById("eventIntro");
   var track=document.getElementById("eventTrack");
   var dots=document.getElementById("eventDots");
-  var btn=document.getElementById("eventMenuBtn");
+  var loader=document.getElementById("eventLoader");
+  var bar=document.getElementById("eventBar");
   track.innerHTML=""; dots.innerHTML="";
-  // Precargar la primera imagen; mostrar botón y dots solo cuando ya esté lista
-  var firstImg=new Image();
-  firstImg.onload=function(){
-    var loader=document.getElementById("eventLoader");
+  intro.style.display="flex";
+  document.body.style.overflow="hidden";
+
+  function revealUI(){
     if(loader) loader.style.display="none";
-    var bar=document.getElementById("eventBar");
     if(bar) bar.style.display="flex";
     if(dots && EVENTS.length>1) dots.style.display="flex";
-  };
-  firstImg.onerror=function(){
-    var loader=document.getElementById("eventLoader");
-    if(loader) loader.style.display="none";
-    var bar=document.getElementById("eventBar");
-    if(bar) bar.style.display="flex";
-  };
-  firstImg.src=EVENTS[0].img;
+  }
+
+  // Crear las imágenes como etiquetas <img> reales (más confiables que background)
   for(var i=0;i<EVENTS.length;i++){
-    var slide=document.createElement("div");
-    slide.style.cssText="position:absolute;inset:0;background-size:contain;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity .6s;background-image:url('"+EVENTS[i].img+"');";
-    if(i===0) slide.style.opacity="1";
-    track.appendChild(slide);
+    var im=document.createElement("img");
+    im.src=EVENTS[i].img;
+    im.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:"+(i===0?"1":"0")+";transition:opacity .6s;";
+    track.appendChild(im);
     if(EVENTS.length>1){
       var dot=document.createElement("span");
       dot.style.cssText="width:8px;height:8px;border-radius:50%;background:"+(i===0?"#fff":"rgba(255,255,255,.4)")+";transition:background .3s;";
       dots.appendChild(dot);
     }
   }
+
+  // Mostrar la franja cuando la primera imagen cargue (o a los 2.5s como respaldo)
+  var first=track.querySelector("img");
+  var revealed=false;
+  function doReveal(){ if(!revealed){ revealed=true; revealUI(); } }
+  if(first){
+    if(first.complete && first.naturalWidth>0){ doReveal(); }
+    else { first.onload=doReveal; first.onerror=doReveal; }
+  } else { doReveal(); }
+  setTimeout(doReveal,2500);
+
   evIdx=0;
-  intro.style.display="block";
-  document.body.style.overflow="hidden";
   if(evTimer) clearInterval(evTimer);
-  if(EVENTS.length>1){
-    evTimer=setInterval(eventNext,4000);
-  }
+  if(EVENTS.length>1){ evTimer=setInterval(eventNext,4000); }
 }
+
 function eventNext(){
   var track=document.getElementById("eventTrack");
   var dots=document.getElementById("eventDots");
